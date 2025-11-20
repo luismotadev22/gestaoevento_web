@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - IPCA Eventos</title>
+<link rel="stylesheet" href="estilos/principal.css">
+</head>
+<body>
+<header class="navbar">
+<img src="imagens/logo_ipca.png" class="logo" alt="Logotipo IPCA">
+<nav>
+<a href="index.html">Início</a>
+<a href="eventos.html">Eventos</a>
+<a href="calendario.html">Calendário</a>
+<a href="sobre_contactos.html">Sobre</a>
+</nav>
+</header>
+
+
+<section class="login">
+<h1>Iniciar Sessão</h1>
+
+
+<form id="form-login" class="form-login">
+<label for="email">E-mail:</label>
+<input type="email" id="email" required>
+
+
+<label for="password">Palavra-passe:</label>
+<input type="password" id="password" required>
+
+
+<button type="submit" class="botao">Entrar</button>
+</form>
+
+
+
+<p id="mensagem-erro" class="erro"></p>
+<section class="registo">
+<h2>Criar Conta</h2>
+<form id="form-registo" class="form-login">
+<label for="registo-email">E-mail universitário:</label>
+<input type="email" id="registo-email" required>
+
+
+<label for="registo-password">Palavra-passe:</label>
+<input type="password" id="registo-password" required>
+
+
+<label for="registo-password2">Confirmar palavra-passe:</label>
+<input type="password" id="registo-password2" required>
+
+
+<button type="submit" class="botao secundario">Criar Conta</button>
+</form>
+<p id="mensagem-registo" class="erro"></p>
+</section>
+
+
+</section>
+
+
+<footer>
+<p>IPCA © 2025 — Todos os direitos reservados.</p>
+</footer>
+
+
+<script src="scripts/autenticacao.js"></script>
+<script src="scripts/login_pagina.js"></script>
+</body>
+</html>

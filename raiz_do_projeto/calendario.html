@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendário de Eventos - IPCA</title>
+<link rel="stylesheet" href="estilos/principal.css">
+<link rel="stylesheet" href="estilos/calendario.css">
+</head>
+<body>
+<header class="navbar">
+<img src="imagens/logo_ipca.png" class="logo" alt="Logotipo IPCA">
+<nav>
+<a href="index.html">Início</a>
+<a href="eventos.html">Eventos</a>
+<a href="calendario.html" class="ativo">Calendário</a>
+<a href="sobre_contactos.html">Sobre</a>
+</nav>
+<a class="botao-login" href="login.html">Login</a>
+</header>
+
+
+<section class="titulo-pagina">
+<h1>Calendário Interativo</h1>
+</section>
+
+
+<section class="calendario">
+<div class="topo-calendario">
+<button id="mes-anterior">&#8592;</button>
+<h2 id="mes-ano"></h2>
+<button id="mes-seguinte">&#8594;</button>
+</div>
+
+
+<div class="dias-semana">
+<span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span><span>Dom</span>
+</div>
+
+
+<div id="grade-calendario" class="grade-calendario"></div>
+</section>
+
+
+<div id="modal-evento" class="modal oculto">
+<div class="conteudo-modal">
+<span id="fechar-modal">&times;</span>
+<h2 id="modal-titulo"></h2>
+<p id="modal-data"></p>
+<p id="modal-descricao"></p>
+<button class="botao requires-login">Inscreva-se</button>
+</div>
+</div>
+
+
+<footer>
+<p>IPCA © 2025 — Todos os direitos reservados.</p>
+</footer>
+
+
+<script src="scripts/principal.js"></script>
+<script src="scripts/calendario.js"></script>
+<script src="scripts/autenticacao.js"></script>
+</body>
+</html>
