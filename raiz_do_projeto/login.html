@@ -4,69 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - IPCA Eventos</title>
-<link rel="stylesheet" href="estilos/principal.css">
+<link rel="stylesheet" href="estilos/login.css">
 </head>
 <body>
-<header class="navbar">
-<img src="imagens/logo_ipca.png" class="logo" alt="Logotipo IPCA">
-<nav>
-<a href="index.html">Início</a>
-<a href="eventos.html">Eventos</a>
-<a href="calendario.html">Calendário</a>
-<a href="sobre_contactos.html">Sobre</a>
-</nav>
-</header>
 
+    <div class="login-wrapper">
 
-<section class="login">
-<h1>Iniciar Sessão</h1>
+        <div class="login-card">
+            
+            <div class="login-header">
+                <img src="imagens/LogoIPCA.png" alt="Logotipo IPCA" class="login-logo"> 
+                <h2>Aceder à Plataforma</h2>
+            </div>
 
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="email">E-mail Institucional</label>
+                    <input type="email" id="email" name="email" required placeholder="exemplo@ipca.pt">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Palavra-passe</label>
+                    <input type="password" id="password" name="password" required placeholder="Insira a sua palavra-passe">
+                </div>
+                
+                <button type="submit" class="btn btn-primario btn-full">Entrar</button>
+                <p id="mensagem-erro" class="erro"></p>
+            </form>
+            
+            <div class="login-footer-links">
+                <a href="recuperar_senha.html" class="link-secundario">Esqueceu-se da Palavra-passe?</a>
+                
+                <hr style="margin: 15px 0; border-color: var(--cor-cinza-fundo);">
+                
+                <p>
+                    Não tem conta? 
+                    <a href="registo.html" class="link-primario">Criar Conta Agora</a> 
+                </p>
+                
+            </div>
+            
+        </div>
 
-<form id="form-login" class="form-login">
-<label for="email">E-mail:</label>
-<input type="email" id="email" required>
-
-
-<label for="password">Palavra-passe:</label>
-<input type="password" id="password" required>
-
-
-<button type="submit" class="botao">Entrar</button>
-</form>
-
-
-
-<p id="mensagem-erro" class="erro"></p>
-<section class="registo">
-<h2>Criar Conta</h2>
-<form id="form-registo" class="form-login">
-<label for="registo-email">E-mail universitário:</label>
-<input type="email" id="registo-email" required>
-
-
-<label for="registo-password">Palavra-passe:</label>
-<input type="password" id="registo-password" required>
-
-
-<label for="registo-password2">Confirmar palavra-passe:</label>
-<input type="password" id="registo-password2" required>
-
-
-<button type="submit" class="botao secundario">Criar Conta</button>
-</form>
-<p id="mensagem-registo" class="erro"></p>
-</section>
-
-
-</section>
-
-
-<footer>
-<p>IPCA © 2025 — Todos os direitos reservados.</p>
-</footer>
-
-
-<script src="scripts/autenticacao.js"></script>
-<script src="scripts/login_pagina.js"></script>
+    </div>
+    <script src="login.js"></script>
 </body>
 </html>

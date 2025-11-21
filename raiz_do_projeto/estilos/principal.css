@@ -95,9 +95,6 @@ main {
 }
 
 
-/* ========================================= */
-/* NAVBAR (UI)                               */
-/* ========================================= */
 .navbar {
     background-color: var(--cor-verde-claro);
     padding: 15px 0;
@@ -154,7 +151,7 @@ main {
 /* Overlay (UI) - Melhora a legibilidade do texto sobre a imagem */
 .banner-overlay {
     background-color: var(--cor-azul-claro); /* Overlay azul profundo */
-    padding: 60px 0;
+    padding: 10px 0;
 }
 
 .texto-banner h1 {
@@ -175,7 +172,7 @@ main {
 /* SECÇÃO DESTAQUES (UI/UX)                  */
 /* ========================================= */
 .secao-destaques {
-    padding: 60px 0;
+    padding: 40px 0;
     background-color: var(--cor-cinza-fundo);
 }
 
@@ -252,7 +249,7 @@ main {
 
 
 .rodape {
-    background-color: var(--cor-azul-profundo);
+    background-color: var(--cor-azul-claro);
     color: rgba(255, 255, 255, 0.8);
     text-align: center;
     padding: 30px 0;

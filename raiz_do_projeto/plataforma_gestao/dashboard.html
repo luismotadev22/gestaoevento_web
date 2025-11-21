@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - IPCA Eventos</title>
+    <link rel="stylesheet" href="../estilos/login.css"> 
+    <link rel="stylesheet" href="../estilos/dashboard.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="logo-area">
+                <img src="../imagens/LogoIPCA.png" alt="Logótipo IPCA" class="logo-pequeno">
+            </div>
+            
+            <nav id="menu-principal">
+                <a href="dashboard.html" class="menu-item active">Início</a>
+                
+                <div id="menu-itens-dinamicos">
+                </div>
+            </nav>
+            
+            <div class="perfil-info">
+                 <p class="perfil-label" id="perfil-label-info">Perfil: ...</p>
+            </div>
+
+            <div class="logout">
+                <button id="btn-logout" class="btn btn-secundario btn-full">Sair</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Bem-vindo(a), <span id="nome-utilizador">Utilizador(a) IPCA</span>!</h1>
+                <p class="perfil-mensagem" id="mensagem-perfil">O seu painel de [Perfil do Utilizador].</p>
+            </header>
+            
+            <section id="dashboard-conteudo">
+                <h2>A carregar painel...</h2>
+                <div class="widgets-grid"></div>
+            </section>
+        </main>
+        
+    </div>
+
+    <script src="../../scripts/dashboard.js"></script> 
+</body>
+</html>

@@ -1,0 +1,137 @@
+root {
+    --cor-azul-profundo: #004488; /* Azul Escuro IPCA */
+    --cor-amarelo-ipca: #FFCC00; /* Amarelo/Dourado IPCA */
+    --cor-cinza-fundo: #f4f7f6; /* Fundo claro para a área de trabalho */
+    --cor-cinza-texto: #555555;
+}
+
+/* 1. Estrutura Principal e Layout */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--cor-cinza-fundo);
+}
+
+/* 2. Barra Lateral (Sidebar) */
+.sidebar {
+    width: 250px;
+    background-color: var(--cor-azul-profundo);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo-area {
+    padding: 0 20px 30px;
+    text-align: center;
+}
+
+.logo-pequeno {
+    width: 80%; /* Ajuste o tamanho da logo */
+    height: auto;
+}
+
+/* 3. Navegação */
+#menu-principal {
+    flex-grow: 1; /* Permite que o menu ocupe o espaço restante */
+    padding: 20px 0;
+}
+
+.menu-item {
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Efeito de hover subtil */
+}
+
+.menu-item.active {
+    background-color: var(--cor-amarelo-ipca);
+    color: var(--cor-azul-profundo);
+    font-weight: bold;
+}
+
+/* 4. Rodapé da Sidebar */
+.perfil-info {
+    padding: 15px 20px 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.perfil-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.logout {
+    padding: 10px 20px 20px;
+}
+
+/* 5. Área Principal de Conteúdo */
+.main-content {
+    flex-grow: 1; /* Ocupa todo o espaço restante */
+    padding: 30px;
+}
+
+.main-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--cor-amarelo-ipca);
+    padding-bottom: 10px;
+}
+
+/* 6. Widgets (Grid de Informação) */
+.widgets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.widget {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.widget:hover {
+    transform: translateY(-2px); /* Efeito de "levantar" (transform: translateY(-2px);) */
+}
+
+.widget h3 {
+    color: var(--cor-azul-profundo);
+    margin-top: 0;
+    font-size: 18px;
+}
+
+.widget-numero {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--cor-amarelo-ipca);
+}
+
+/* Widget de Chamada para Ação (CTA) */
+.widget-cta {
+    background-color: var(--cor-amarelo-ipca);
+    color: var(--cor-azul-profundo);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.widget-cta h3 {
+    color: var(--cor-azul-profundo);
+}
+
+/* Utilitários */
+.btn-full {
+    width: 100%;
+    /* Reutiliza o estilo do botão primário do login.css */
+}
