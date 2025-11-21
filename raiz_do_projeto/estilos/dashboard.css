@@ -1,120 +1,144 @@
-root {
-    --cor-azul-profundo: #004488; /* Azul Escuro IPCA */
-    --cor-amarelo-ipca: #FFCC00; /* Amarelo/Dourado IPCA */
-    --cor-cinza-fundo: #f4f7f6; /* Fundo claro para a área de trabalho */
-    --cor-cinza-texto: #555555;
+:root {
+    /* Cores da Homepage */
+    --cor-azul-claro: #4285F4; /* Azul Primário da Homepage (Banner/Destaques) */
+    --cor-amarelo-ipca: #FFCC00; /* Amarelo de Destaque (Números, CTAs, Ativos) */
+    --cor-azul-profundo: #004488; /* Azul Escuro (Sidebar, Títulos, Contraste) */
+    --cor-fundo-claro: #f8f8f8; 
+    --cor-texto-escuro: #333333;
+    --cor-texto-claro: #ffffff;
 }
 
-/* 1. Estrutura Principal e Layout */
+/* --- ESTILOS GERAIS E LAYOUT --- */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cor-fundo-claro);
+    color: var(--cor-texto-escuro);
+}
+
 .dashboard-container {
     display: flex;
     min-height: 100vh;
-    background-color: var(--cor-cinza-fundo);
 }
 
-/* 2. Barra Lateral (Sidebar) */
+/* 1. BARRA LATERAL (SIDEBAR) */
 .sidebar {
     width: 250px;
-    background-color: var(--cor-azul-profundo);
-    color: white;
+    background-color: var(--cor-azul-profundo); /* Azul Escuro para dar peso e estabilidade */
+    color: var(--cor-texto-claro);
     display: flex;
     flex-direction: column;
-    padding: 20px 0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .logo-area {
-    padding: 0 20px 30px;
+    padding: 20px;
     text-align: center;
 }
 
 .logo-pequeno {
-    width: 80%; /* Ajuste o tamanho da logo */
+    width: 100%; 
     height: auto;
+    filter: brightness(0) invert(1); 
 }
 
-/* 3. Navegação */
+/* 2. NAVEGAÇÃO */
 #menu-principal {
-    flex-grow: 1; /* Permite que o menu ocupe o espaço restante */
-    padding: 20px 0;
+    flex-grow: 1; 
+    padding: 0;
+    margin-top: 20px;
 }
 
 .menu-item {
     display: block;
     padding: 12px 20px;
-    color: white;
+    color: var(--cor-texto-claro);
     text-decoration: none;
-    font-size: 16px;
+    font-size: 15px;
     transition: background-color 0.2s;
 }
 
 .menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Efeito de hover subtil */
+    background-color: rgba(255, 204, 0, 0.2);
 }
 
 .menu-item.active {
-    background-color: var(--cor-amarelo-ipca);
+    background-color: var(--cor-amarelo-ipca); /* Item Ativo em Amarelo Destaque */
     color: var(--cor-azul-profundo);
-    font-weight: bold;
+    font-weight: 700;
 }
 
-/* 4. Rodapé da Sidebar */
+/* 3. RODAPÉ DA SIDEBAR */
 .perfil-info {
     padding: 15px 20px 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .perfil-label {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
 }
 
 .logout {
     padding: 10px 20px 20px;
 }
 
-/* 5. Área Principal de Conteúdo */
+/* 4. ÁREA PRINCIPAL DE CONTEÚDO */
 .main-content {
-    flex-grow: 1; /* Ocupa todo o espaço restante */
-    padding: 30px;
+    flex-grow: 1;
+    padding: 40px;
 }
 
 .main-header {
     margin-bottom: 30px;
-    border-bottom: 2px solid var(--cor-amarelo-ipca);
+    border-bottom: 3px solid var(--cor-azul-claro); /* Usa o azul primário da homepage */
     padding-bottom: 10px;
 }
 
-/* 6. Widgets (Grid de Informação) */
+.main-header h1 {
+    color: var(--cor-azul-profundo);
+    margin: 0 0 5px 0;
+}
+
+/* 5. WIDGETS (GRID DE INFORMAÇÃO) */
 .widgets-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 25px;
     margin-top: 20px;
 }
 
 .widget {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--cor-texto-claro);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-top: 5px solid var(--cor-azul-claro); /* Linha de destaque com a cor primária */
     transition: transform 0.2s;
 }
 
 .widget:hover {
-    transform: translateY(-2px); /* Efeito de "levantar" (transform: translateY(-2px);) */
+    transform: translateY(-5px); 
 }
 
 .widget h3 {
     color: var(--cor-azul-profundo);
     margin-top: 0;
-    font-size: 18px;
+    font-size: 17px;
 }
 
 .widget-numero {
-    font-size: 36px;
-    font-weight: bold;
-    color: var(--cor-amarelo-ipca);
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--cor-amarelo-ipca); /* Destaque numérico Amarelo */
+    margin: 5px 0 10px;
+}
+
+.widget-detalhe {
+    font-size: 13px;
+    color: #999;
 }
 
 /* Widget de Chamada para Ação (CTA) */
@@ -124,14 +148,40 @@ root {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-top: 5px solid var(--cor-azul-profundo);
 }
 
 .widget-cta h3 {
     color: var(--cor-azul-profundo);
 }
 
-/* Utilitários */
+/* 6. ESTILOS DOS BOTÕES */
+.btn {
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+}
+
 .btn-full {
     width: 100%;
-    /* Reutiliza o estilo do botão primário do login.css */
+    text-align: center;
+}
+
+.btn-primario {
+    background-color: var(--cor-azul-profundo);
+    color: var(--cor-texto-claro);
+}
+
+.btn-secundario {
+    background-color: var(--cor-texto-claro);
+    color: var(--cor-azul-profundo);
+    border: 1px solid var(--cor-azul-profundo);
+}
+
+.btn-secundario:hover {
+    background-color: var(--cor-fundo-claro);
 }
