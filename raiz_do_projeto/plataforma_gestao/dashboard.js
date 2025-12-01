@@ -1,166 +1,224 @@
-document.addEventListener('DOMContentLoaded', () => {
+function obterDadosDoUtilizador(perfil, email) {
+    if (perfil === 'organizador') {
+        return {
+            totalArrecadado: 14720.50,
+            inscricoesTotais: 412,
+            eventosAtivos: 7, 
+            notificacoes: 2 
+        };
+    } 
     
-    // --- 1. PROTEÇÃO DE ACESSO E VARIAVEIS DE SESSÃO ---
-    
-    const estaLogado = localStorage.getItem('usuarioLogado');
+    else if (perfil === 'participante') {
+        return {
+            proximoEvento: {
+                nome: "Workshop de Design Thinking",
+                data: "10/12/2025",
+                local: "Sala B1.04",
+                orador: "Prof. Maria Sousa"
+            },
+            bilhetes: {
+                total: 3,
+                vip: 1,
+                normal: 2,
+                gastoTotal: 85.55
+            },
+            notificacoes: 5
+        };
+    }
+    return {}; 
+}
 
-    if (estaLogado !== 'true') {
-        // Se não estiver logado, redireciona para a página de login.
+
+// =========================================================
+// SCRIPT PRINCIPAL DO DASHBOARD 
+// =========================================================
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- 1. VERIFICAÇÃO DE SEGURANÇA (AUTENTICAÇÃO) ---
+    // !!! CORRIGIDO PARA USAR A CHAVE DO SEU LOGIN.JS !!!
+    const estaLogado = localStorage.getItem('Utilizador Logado') === 'true';
+    if (!estaLogado) {
+        alert('Acesso negado. Por favor, faça login.');
         window.location.href = '../login.html'; 
         return; 
     }
-    
-    // Obter dados do utilizador
-    const perfil = localStorage.getItem('perfilUsuario');
-    const emailCompleto = localStorage.getItem('emailUtilizador') || 'usuario@ipca.pt';
-    const nomeBase = emailCompleto.split('@')[0];
-    
-    // 2. REFERÊNCIAS DO DOM
-    const nomeDisplay = document.getElementById('nome-utilizador');
-    const mensagemPerfil = document.getElementById('mensagem-perfil');
-    const perfilLabel = document.getElementById('perfil-label-info');
-    const menuItensContainer = document.getElementById('menu-itens-dinamicos');
-    const dashboardConteudo = document.getElementById('dashboard-conteudo');
-    const botaoSair = document.getElementById('btn-logout'); 
-    
-    // 2.1. Personalizar Cabeçalho e Sidebar
-    if (nomeDisplay) nomeDisplay.textContent = nomeBase; 
-    if (mensagemPerfil) mensagemPerfil.textContent = `Painel de controlo do ${perfil.charAt(0).toUpperCase() + perfil.slice(1)}.`;
-    if (perfilLabel) perfilLabel.textContent = `Perfil: ${perfil.charAt(0).toUpperCase() + perfil.slice(1)}`;
 
-    // --- 3. CONSTRUÇÃO DINÂMICA DO MENU E CONTEÚDO ---
+    // --- 2. OBTER DADOS DO UTILIZADOR E CORREÇÃO CRÍTICA ---
+    // !!! CORRIGIDO PARA USAR A CHAVE DO SEU LOGIN.JS !!!
+    const perfil = localStorage.getItem('Perfil Utilizador'); 
+    
+    
+    // O seu login.js não define 'emailUtilizador'. Vamos usar o perfil como fallback
+    const nomeBase = perfil ? perfil.split(' ')[0] : 'Utilizador'; 
+    const emailCompleto = localStorage.getItem('emailUtilizador') || 'nao.definido@ipca.pt';
 
-    const menuBase = [
-        { nome: 'Meus Dados Pessoais', link: 'dados_pessoais.html' },
-        { nome: 'Notificações', link: 'notificacoes.html' } // Requisito: Receber notificações
-    ];
+    // 3. OBTER "PONTOS DE INJEÇÃO" DO HTML
+    const menuContainer = document.getElementById('menu-principal-dinamico');
+    const conteudoContainer = document.getElementById('conteudo-principal-dinamico');
+    const nomeUtilizadorEl = document.getElementById('display-nome-utilizador');
+    const perfilUtilizadorEl = document.getElementById('display-perfil-utilizador');
+    const tituloHeaderEl = document.getElementById('display-header-titulo');
+    const subtituloHeaderEl = document.getElementById('display-header-subtitulo');
+    const logoLink = document.getElementById('logo-link');
+
+    // **VERIFICAÇÃO CRÍTICA (Adaptada):** Se o perfil for inválido, paramos.
+    if (!perfil || (perfil !== 'organizador' && perfil !== 'participante')) {
+        tituloHeaderEl.textContent = 'ERRO DE PERFIL';
+        subtituloHeaderEl.textContent = 'O tipo de perfil (' + perfil + ') é inválido ou nulo. Verifique o login.';
+        // Não redireciona automaticamente para que possa inspecionar o erro.
+        console.error('ERRO CRÍTICO: Perfil do Utilizador não é "organizador" nem "participante".');
+        return; 
+    }
+    
+    // Definir o link do logo (requisito)
+    logoLink.href = 'dashboard.html';
+
+    // --- 4. OBTER DADOS DA "BASE DE DADOS" ---
+    const dados = obterDadosDoUtilizador(perfil, emailCompleto);
+
+    // --- 5. CONSTRUÇÃO DINÂMICA (O "IF/ELSE") ---
+    let menuHTML = '';
+    let conteudoHTML = '';
 
     if (perfil === 'organizador') {
-        // ITENS DE MENU ESPECÍFICOS PARA ORGANIZADOR (Criação, Gestão, Vendas)
-        menuBase.push(
-            { nome: 'Criar Evento', link: 'criar_evento.html' }, // Requisito: Criar/Editar/Eliminar eventos
-            { nome: 'Gerir Eventos', link: 'gerir_eventos.html' }, // Requisito: Adicionar atividades, Gerir Participantes, Aplicar Descontos
-            { nome: 'Relatórios & Vendas', link: 'relatorios.html' } // Requisito: Ver inscritos e valor arrecadado
-        );
-        dashboardConteudo.innerHTML = gerarConteudoOrganizador(nomeBase);
+        // -------------------------
+        // CONSTRUIR DASHBOARD ORGANIZADOR
+        // -------------------------
+        tituloHeaderEl.textContent = `Bem-vindo João!`;
+        subtituloHeaderEl.textContent = 'Crie os melhores eventos, workshops e conferências do IPCA!';
         
-    } else if (perfil === 'participante') {
-        // ITENS DE MENU ESPECÍFICOS PARA PARTICIPANTE (Inscrição, Agenda, Bilhetes)
-        menuBase.push(
-            { nome: 'Explorar Eventos', link: 'explorar_eventos.html' }, // Requisito: Lista de eventos, filtros
-            { nome: 'Minhas Inscrições', link: 'meus_eventos.html' }, // Requisito: Inscrever-se, Simular Pagamento, Venda de Bilhetes
-            { nome: 'Agenda & Favoritos', link: 'minha_agenda.html' }, // Requisito: Agenda de atividades, Favoritos e Lembretes
-            { nome: 'Bilhetes & Reembolsos', link: 'reembolsos.html' } // Requisito: Cancelamento e reembolso
-        );
-        dashboardConteudo.innerHTML = gerarConteudoParticipante(nomeBase);
-    }
-    
-    // Injetar o menu no DOM
-    if (menuItensContainer) {
-        menuItensContainer.innerHTML = menuBase.map(item => `
-            <a href="${item.link}" class="menu-item">
-                ${item.nome}
-            </a>
-        `).join('');
-    }
+        menuHTML = `
+            <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Início (Dashboard)</span></a>
+            <a href="criar_evento.html" class="menu-item"><i class="fas fa-plus-circle"></i><span>Criar Evento</span></a>
+            <a href="gerir_eventos.html" class="menu-item"><i class="fas fa-edit"></i><span>Gerir Eventos</span></a>
+            <a href="relatorios.html" class="menu-item"><i class="fas fa-chart-line"></i><span>Relatórios & Vendas</span></a>
+            <a href="dados_pessoais.html" class="menu-item"><i class="fas fa-user-cog"></i><span>Gestão de Perfil</span></a>
+        `;
 
-    // --- 4. LÓGICA DE LOGOUT ---
-    
-    if (botaoSair) {
-        botaoSair.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            // Limpa as flags de sessão e redireciona
-            localStorage.removeItem('usuarioLogado');
-            localStorage.removeItem('perfilUsuario');
-            localStorage.removeItem('emailUtilizador');
-            window.location.href = '../login.html';
-        });
-    }
-});
-
-
-// --- FUNÇÕES AUXILIARES DE CONTEÚDO (WIDGETS) ---
-
-function gerarConteudoOrganizador(nome) {
-    // Foco: Gestão, Vendas e Métricas
-    return `
-        <h2>Visão Geral de Gestão</h2>
-        <div class="widgets-grid">
+        conteudoHTML = `
             <div class="widget">
-                <h3>Eventos Ativos</h3>
-                <p class="widget-numero">3</p>
-                <p class="widget-detalhe">1 com Descontos Ativos | 2 com Venda VIP</p>
-            </div>
-            <div class="widget widget-dinheiro">
                 <h3>Total Arrecadado (€)</h3>
-                <p class="widget-numero">€ 1 245,50</p>
-                <p class="widget-detalhe">Valor total dos bilhetes Normal e VIP</p>
+                <p class="widget-numero widget-dinheiro">${dados.totalArrecadado.toLocaleString('pt-PT', {
+                    style: 'currency',
+                    currency: 'EUR'
+                })}</p>
+                <p class="widget-detalhe">Receita bruta total (Bilhetes Normal e VIP).</p>
             </div>
             <div class="widget">
                 <h3>Inscrições Totais</h3>
-                <p class="widget-numero">154</p>
-                <p class="widget-detalhe">Média de 51 participantes por evento</p>
-            </div>
-            <div class="widget widget-cta">
-                <h3>Novo Evento ou Atividade?</h3>
-                <a href="criar_evento.html" class="btn btn-primario btn-full">Criar Evento +</a>
-            </div>
-        </div>
-        
-        <h2 style="margin-top: 40px;">Pendências e Ações Rápidas</h2>
-        <div class="widgets-grid">
-             <div class="widget">
-                <h3>Eventos a Publicar</h3>
-                <p class="widget-numero">1</p>
-                <p class="widget-detalhe">Conferência de IA pendente de horário final.</p>
+                <p class="widget-numero">${dados.inscricoesTotais}</p>
+                <p class="widget-detalhe">Total de participantes em todos os eventos.</p>
             </div>
             <div class="widget">
-                <h3>Aplicações de Desconto</h3>
-                <p class="widget-numero">5</p>
-                <p class="widget-detalhe">Grupos de estudantes à espera de aprovação.</p>
+                <h3>Inscritos (Eventos Ativos)</h3>
+                <p class="widget-numero">${dados.eventosAtivos}</p>
+                <p class="widget-detalhe">Inscritos em eventos no período de vendas.</p>
             </div>
-        </div>
-    `;
-}
+            <div class="widget">
+                <h3>Notificações</h3>
+                <p class="widget-numero">${dados.notificacoes}</p>
+                <p class="widget-detalhe">Alertas e pendências não lidas.</p>
+            </div>
+            <div class="widget widget-cta">
+                <h3>Pronto para o próximo evento?</h3>
+                <p class="widget-detalhe">Comece a configurar a sua próxima conferência ou workshop.</p>
+                <a href="criar_evento.html" class="btn btn-primario"><i class="fas fa-plus-circle"></i> Criar Novo Evento</a>
+            </div>
+        `;
 
-function gerarConteudoParticipante(nome) {
-    // Foco: Atividades Pessoais, Agenda e Bilhetes
-    return `
-        <h2>Minha Área Pessoal e Agenda</h2>
-        <div class="widgets-grid">
+    } else if (perfil === 'participante') {
+        // -------------------------
+        // CONSTRUIR DASHBOARD PARTICIPANTE
+        // -------------------------
+        tituloHeaderEl.textContent = `Bem-vindo João!`;
+        subtituloHeaderEl.textContent = 'Participe nos melhores eventos, workshops e conferências do IPCA!';
+        
+        menuHTML = `
+            <a href="dashboard.html" class="menu-item active"><i class="fas fa-home"></i><span>Início (Dashboard)</span></a>
+            <a href="explorar_eventos.html" class="menu-item"><i class="fas fa-search"></i><span>Explorar Eventos</span></a>
+            <a href="minhas_inscricoes.html" class="menu-item"><i class="fas fa-ticket-alt"></i><span>As Minhas Inscrições</span></a>
+            <a href="eventos_favoritos.html" class="menu-item"><i class="fas fa-star"></i><span>Eventos Favoritos</span></a>
+            <a href="dados_pessoais.html" class="menu-item"><i class="fas fa-user-cog"></i><span>Gestão de Perfil</span></a>
+        `;
+
+        conteudoHTML = `
             <div class="widget">
-                <h3>Inscrições Ativas</h3>
-                <p class="widget-numero">2</p>
-                <p class="widget-detalhe">1 Bilhete VIP | 1 Bilhete Normal</p>
-            </div>
-            <div class="widget widget-agenda">
-                <h3>Próximo Evento (Agenda)</h3>
-                <p class="widget-numero">Seminário de Cibersegurança</p>
-                <p class="widget-detalhe">Dia: 2026/01/10 | Local: Auditório A</p>
+                <h3>Próximo Evento</h3>
+                <p class="widget-titulo-destaque">${dados.proximoEvento.nome}</p>
+                <p class="widget-detalhe"><i class="fas fa-calendar-alt"></i> Data: ${dados.proximoEvento.data}</p>
+                <p class="widget-detalhe"><i class="fas fa-map-marker-alt"></i> Local: ${dados.proximoEvento.local}</p>
+                <p class="widget-detalhe"><i class="fas fa-microphone"></i> Orador: ${dados.proximoEvento.orador}</p>
             </div>
             <div class="widget">
-                <h3>Atividades Favoritas</h3>
-                <p class="widget-numero">5</p>
-                <p class="widget-detalhe">Lembretes e Notificações Ativas</p>
+                <h3>Os Meus Bilhetes</h3>
+                <p class="widget-numero">${dados.bilhetes.total}</p>
+                <p class="widget-detalhe">Total (VIP: ${dados.bilhetes.vip} | Normal: ${dados.bilhetes.normal})</p>
+                <p class="widget-numero widget-dinheiro">${dados.bilhetes.gastoTotal.toLocaleString('pt-PT', {
+                    style: 'currency',
+                    currency: 'EUR'
+                })}</p>
+                <p class="widget-detalhe">Gasto total</p>
+            </div>
+            <div class="widget">
+                <h3>Notificações</h3>
+                <p class="widget-numero">${dados.notificacoes}</p>
+                <p class="widget-detalhe">Alertas e lembretes não lidos.</p>
             </div>
             <div class="widget widget-cta">
-                <h3>Procure o seu Próximo Evento</h3>
-                <a href="explorar_eventos.html" class="btn btn-primario btn-full">Explorar Eventos (Filtrar)</a>
+                <h3>Descubra a sua próxima experiência</h3>
+                <p class="widget-detalhe">Encontre conferências, workshops e seminários na sua área.</p>
+                <a href="explorar_eventos.html" class="btn btn-primario"><i class="fas fa-search"></i> Explorar Eventos</a>
             </div>
-        </div>
-        
-        <h2 style="margin-top: 40px;">Gestão de Bilhetes e Notificações</h2>
-        <div class="widgets-grid">
-            <div class="widget">
-                <h3>Notificações Importantes</h3>
-                <p class="widget-numero">1</p>
-                <p class="widget-detalhe">Alteração de horário no "Workshop de Design".</p>
-            </div>
-             <div class="widget">
-                <h3>Reembolsos Pendentes</h3>
-                <p class="widget-numero">0</p>
-                <p class="widget-detalhe">Simular Cancelamento de Bilhete.</p>
-            </div>
-        </div>
-    `;
-}
+        `;
+    }
+
+    // --- 6. INJETAR O CONTEÚDO NO HTML ---
+    if (menuContainer) menuContainer.innerHTML = menuHTML;
+    if (conteudoContainer) conteudoContainer.innerHTML = conteudoHTML;
+
+    // --- 7. INJETAR INFO DO PERFIL (RODAPÉ DA SIDEBAR) ---
+    if (nomeUtilizadorEl && perfil) {
+        nomeUtilizadorEl.textContent = nomeBase;
+        // Capitalizar a primeira letra do perfil
+        perfilUtilizadorEl.textContent = perfil.charAt(0).toUpperCase() + perfil.slice(1);
+    }
+
+
+    // --- 8. LÓGICA DE LOGOUT ---
+    const btnLogout = document.getElementById('btn-logout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', (e) => {
+            e.preventDefault(); 
+            
+            // Limpar as chaves usadas pelo seu login.js
+            localStorage.removeItem('Utilizador Logado');
+            localStorage.removeItem('Perfil Utilizador');
+            localStorage.removeItem('emailUtilizador');
+            localStorage.removeItem('sidebarRecolhida'); 
+            
+            window.location.href = '../login.html';
+        });
+    }
+
+    // --- 9. LÓGICA DO TOGGLE DA BARRA LATERAL ---
+    const toggleBtn = document.getElementById('toggle-sidebar');
+    const container = document.getElementById('dashboard-container');
+    
+    if (toggleBtn && container) {
+        const isRecolhida = localStorage.getItem('sidebarRecolhida') === 'true';
+        if (isRecolhida) {
+            container.classList.add('sidebar-recolhida');
+            toggleBtn.textContent = '→';
+        } else {
+            toggleBtn.textContent = '←';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            container.classList.toggle('sidebar-recolhida');
+            const novoEstado = container.classList.contains('sidebar-recolhida');
+            localStorage.setItem('sidebarRecolhida', novoEstado);
+            toggleBtn.textContent = novoEstado ? '→' : '←';
+        });
+    }
+
+});

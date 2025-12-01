@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Obter referências para os elementos do DOM (IDs do seu HTML de login)
+    //  Obter referências para os elementos do DOM (IDs do seu HTML de login)
     const formLogin = document.getElementById('form-login');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
@@ -24,17 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const utilizadoresJSON = localStorage.getItem('utilizadoresIPCA');
         const utilizadores = utilizadoresJSON ? JSON.parse(utilizadoresJSON) : [];
 
-        // 1. Procurar o utilizador pelo email
+        //  Procurar o utilizador pelo email
         const utilizador = utilizadores.find(u => u.email === email);
 
-        // 2. Verificar credenciais
+        //  Verificar credenciais
         if (utilizador && utilizador.password === password) {
             
-            // Sucesso!
+          
             
             // Marcar a sessão como ativa e guardar o perfil do utilizador encontrado
-            localStorage.setItem('usuarioLogado', 'true'); 
-            localStorage.setItem('perfilUsuario', utilizador.perfil); 
+            localStorage.setItem('Utilizador Logado', 'true'); 
+            localStorage.setItem('Perfil Utilizador', utilizador.perfil); 
             
             // Feedback de sucesso
             mensagemErro.textContent = 'Login bem-sucedido! Acedendo ao Dashboard...';

@@ -1,174 +1,258 @@
+/* =========================================== */
+/* DEFINIÇÃO DA PALETE DE CORES (VARIÁVEIS) */
+/* ESTA É CRUCIAL PARA AS CORES FUNCIONAREM! */
+/* =========================================== */
 :root {
-    /* Cores da Homepage */
-    --cor-azul-claro: #4285F4; /* Azul Primário da Homepage (Banner/Destaques) */
-    --cor-amarelo-ipca: #FFCC00; /* Amarelo de Destaque (Números, CTAs, Ativos) */
-    --cor-azul-profundo: #004488; /* Azul Escuro (Sidebar, Títulos, Contraste) */
-    --cor-fundo-claro: #f8f8f8; 
-    --cor-texto-escuro: #333333;
-    --cor-texto-claro: #ffffff;
+    /* I. CORES DA MARCA (IPCA) */
+    --cor-azul-profundo: #004488;
+    --cor-amarelo-destaque: #FFCC00;
+    --cor-azul-claro-ui: #4285F4;
+    
+    /* II. CORES GERAIS E DE TEXTO */
+    --cor-fundo-geral: #F8F8F8;
+    --cor-fundo-conteudo: #FFFFFF;
+    --cor-texto-principal: #333333;
+    --cor-texto-claro: #FFFFFF;
+    --cor-texto-secundario: #666;
+
+    /* III. CORES DE ESTADO */
+    --cor-sucesso: #28a745;
+    --cor-erro: #dc3545;
 }
 
-/* --- ESTILOS GERAIS E LAYOUT --- */
-body {
+/* =========================================== */
+/* ESTILOS GLOBAIS E LAYOUT                 */
+/* =========================================== */
+* {
+    box-sizing: border-box;
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--cor-fundo-claro);
-    color: var(--cor-texto-escuro);
+    padding: 0;
+}
+
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--cor-fundo-geral);
+    color: var(--cor-texto-principal);
+    line-height: 1.6;
 }
 
 .dashboard-container {
-    display: flex;
+    display: flex; /* Define o layout lateral (Sidebar + Conteúdo) */
+    width: 100%;
     min-height: 100vh;
 }
 
-/* 1. BARRA LATERAL (SIDEBAR) */
+/* =========================================== */
+/* ESTILOS DA BARRA LATERAL (SIDEBAR)       */
+/* =========================================== */
 .sidebar {
-    width: 250px;
-    background-color: var(--cor-azul-profundo); /* Azul Escuro para dar peso e estabilidade */
+    width: 260px;
+    background-color: var(--cor-azul-claro-ui);
     color: var(--cor-texto-claro);
     display: flex;
     flex-direction: column;
-    padding: 0;
-    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    transition: width 0.3s ease-in-out; /* Adicionado para a transição do toggle */
 }
 
 .logo-area {
-    padding: 20px;
+    padding: 25px 20px;
     text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.logo-pequeno {
-    width: 100%; 
-    height: auto;
-    filter: brightness(0) invert(1); 
+.logo-ipca {
+    max-width: 120px;
 }
 
-/* 2. NAVEGAÇÃO */
-#menu-principal {
+.menu-principal {
     flex-grow: 1; 
-    padding: 0;
-    margin-top: 20px;
+    padding-top: 20px;
 }
 
 .menu-item {
-    display: block;
-    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 25px;
     color: var(--cor-texto-claro);
     text-decoration: none;
-    font-size: 15px;
-    transition: background-color 0.2s;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.menu-item i {
+    width: 20px; 
+    text-align: center;
 }
 
 .menu-item:hover {
-    background-color: rgba(255, 204, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .menu-item.active {
-    background-color: var(--cor-amarelo-ipca); /* Item Ativo em Amarelo Destaque */
+    background-color: var(--cor-amarelo-destaque);
     color: var(--cor-azul-profundo);
-    font-weight: 700;
+    font-weight: bold;
 }
 
-/* 3. RODAPÉ DA SIDEBAR */
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .perfil-info {
-    padding: 15px 20px 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 15px;
+    text-align: center;
 }
 
-.perfil-label {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.8);
-    margin: 0;
+.perfil-info .nome-utilizador {
+    font-weight: bold;
+    font-size: 0.95rem;
 }
 
-.logout {
-    padding: 10px 20px 20px;
+.perfil-info .perfil-utilizador {
+    font-size: 0.90rem;
+    opacity: 0.90;
 }
 
-/* 4. ÁREA PRINCIPAL DE CONTEÚDO */
+.btn-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--cor-texto-claro);
+    border: 1px solid var(--cor-amarelo-destaque);
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-logout:hover {
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-azul-profundo);
+}
+
+/* =========================================== */
+/* ESTILOS DO CONTEÚDO PRINCIPAL            */
+/* =========================================== */
 .main-content {
     flex-grow: 1;
-    padding: 40px;
-}
-
-.main-header {
-    margin-bottom: 30px;
-    border-bottom: 3px solid var(--cor-azul-claro); /* Usa o azul primário da homepage */
-    padding-bottom: 10px;
+    padding: 30px 40px;
+    overflow-y: auto; 
+    transition: width 0.3s ease-in-out;
+    width: calc(100% - 260px); /* Importante para o layout lateral */
 }
 
 .main-header h1 {
     color: var(--cor-azul-profundo);
-    margin: 0 0 5px 0;
+    font-size: 2rem;
+    margin-bottom: 5px;
 }
 
-/* 5. WIDGETS (GRID DE INFORMAÇÃO) */
-.widgets-grid {
-    display: grid;
+.main-header p {
+    color: var(--cor-texto-secundario);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+/* =========================================== */
+/* ESTILOS DOS WIDGETS (GRID)               */
+/* =========================================== */
+.widgets-container {
+    display: grid; /* Esta é a chave para a organização */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
+    gap: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+    margin-top: 90px;
+    padding: 5px;
 }
 
 .widget {
-    background-color: var(--cor-texto-claro);
+    background-color: var(--cor-amarelo-destaque);
     padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-top: 5px solid var(--cor-azul-claro); /* Linha de destaque com a cor primária */
-    transition: transform 0.2s;
-}
-
-.widget:hover {
-    transform: translateY(-5px); 
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--cor-fundo-geral);
 }
 
 .widget h3 {
-    color: var(--cor-azul-profundo);
     margin-top: 0;
-    font-size: 17px;
+    margin-bottom: 15px;
+    color: var(--cor-azul-profundo);
+    font-size: 1.1rem;
 }
 
 .widget-numero {
-    font-size: 40px;
-    font-weight: 800;
-    color: var(--cor-amarelo-ipca); /* Destaque numérico Amarelo */
-    margin: 5px 0 10px;
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 5px 0;
+    color: var(--cor-texto-principal);
+}
+
+/* NOVO: Estilo para o título do Próximo Evento (Participante) */
+.widget-titulo-destaque {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--cor-azul-profundo);
+    margin-bottom: 10px;
+}
+
+.widget-numero.widget-dinheiro {
+    color: var(--cor-texto-principal);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-size: 2.5rem; 
+    line-height: 1.9;
 }
 
 .widget-detalhe {
-    font-size: 13px;
-    color: #999;
+    color: var(--cor-texto-secundario);
+    font-size: 0.9rem;
 }
 
-/* Widget de Chamada para Ação (CTA) */
+.widget-detalhe i {
+    margin-right: 8px;
+    color: var(--cor-azul-claro-ui);
+}
+
+
+/* =========================================== */
+/* WIDGET DE AÇÃO RÁPIDA (CTA) E BOTÕES     */
+/* =========================================== */
 .widget-cta {
-    background-color: var(--cor-amarelo-ipca);
-    color: var(--cor-azul-profundo);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-top: 5px solid var(--cor-azul-profundo);
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-texto-preto);
 }
 
 .widget-cta h3 {
     color: var(--cor-azul-profundo);
+    font-size: 1.3rem;
 }
 
-/* 6. ESTILOS DOS BOTÕES */
+.widget-cta .widget-detalhe {
+    color: var(--cor-texto-secundario);
+    margin-bottom: 20px;
+}
+
 .btn {
-    padding: 10px 15px;
-    border-radius: 4px;
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 5px;
     text-decoration: none;
-    font-weight: 600;
-    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
     border: none;
-    transition: background-color 0.3s;
-}
-
-.btn-full {
-    width: 100%;
-    text-align: center;
+    cursor: pointer;
 }
 
 .btn-primario {
@@ -176,12 +260,61 @@ body {
     color: var(--cor-texto-claro);
 }
 
-.btn-secundario {
-    background-color: var(--cor-texto-claro);
-    color: var(--cor-azul-profundo);
-    border: 1px solid var(--cor-azul-profundo);
+.btn-primario:hover {
+    background-color: #003366; 
 }
 
-.btn-secundario:hover {
-    background-color: var(--cor-fundo-claro);
+/* Ajuste no CTA para o botão branco */
+.widget-cta .btn-primario {
+    background-color: var(--cor-fundo-conteudo);
+    color: var(--cor-azul-profundo);
+}
+
+.widget-cta .btn-primario:hover {
+    background-color: #f0f0f0;
+}
+
+/* =========================================== */
+/* LÓGICA DO TOGGLE DA BARRA LATERAL (DO SEU CÓDIGO) */
+/* =========================================== */
+.toggle-btn {
+    position: absolute;
+    top: 70px; 
+    right: -25px;
+    width: 25px;
+    height: 40px;
+    background-color: var(--cor-amarelo-destaque);
+    color: var(--cor-azul-profundo);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estado Recolhido */
+.dashboard-container.sidebar-recolhida .sidebar {
+    width: 80px; 
+}
+
+.dashboard-container.sidebar-recolhida .main-content {
+    width: calc(100% - 80px); 
+}
+
+.dashboard-container.sidebar-recolhida .logo-ipca {
+    max-width: 50px; 
+}
+
+.dashboard-container.sidebar-recolhida .menu-item span,
+.dashboard-container.sidebar-recolhida .perfil-info,
+.dashboard-container.sidebar-recolhida .btn-logout span {
+    display: none; 
+}
+
+.dashboard-container.sidebar-recolhida .menu-item {
+    justify-content: center;
 }
