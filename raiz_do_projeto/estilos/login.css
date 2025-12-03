@@ -90,6 +90,11 @@ body {
 .login-logo {
     height: 60px;
     margin-bottom: 15px;
+    filter: brightness(2.0);
+    filter: saturate(2.0);
+    text-align: center;
+    align-self: start;
+    align-items: center;
 }
 
 .login-header h2 {

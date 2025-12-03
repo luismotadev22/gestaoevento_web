@@ -1,3 +1,6 @@
+import { auth, db } from '../firebase_connection.js';
+
+// ESTA FUNÇÃO PERMANECE INALTERADA (APENAS SIMULAÇÃO DE DADOS ESTÁTICOS)
 function obterDadosDoUtilizador(perfil, email) {
     if (perfil === 'organizador') {
         return {
@@ -29,30 +32,13 @@ function obterDadosDoUtilizador(perfil, email) {
 }
 
 
-// =========================================================
-// SCRIPT PRINCIPAL DO DASHBOARD 
-// =========================================================
-document.addEventListener('DOMContentLoaded', () => {
-
-    // --- 1. VERIFICAÇÃO DE SEGURANÇA (AUTENTICAÇÃO) ---
-    // !!! CORRIGIDO PARA USAR A CHAVE DO SEU LOGIN.JS !!!
-    const estaLogado = localStorage.getItem('Utilizador Logado') === 'true';
-    if (!estaLogado) {
-        alert('Acesso negado. Por favor, faça login.');
-        window.location.href = '../login.html'; 
-        return; 
-    }
-
-    // --- 2. OBTER DADOS DO UTILIZADOR E CORREÇÃO CRÍTICA ---
-    // !!! CORRIGIDO PARA USAR A CHAVE DO SEU LOGIN.JS !!!
-    const perfil = localStorage.getItem('Perfil Utilizador'); 
+// NOVO: Função para encapsular toda a lógica de renderização original (Passos 3 a 9)
+function carregarConteudoDashboard(perfil, emailCompleto) {
     
-    
-    // O seu login.js não define 'emailUtilizador'. Vamos usar o perfil como fallback
-    const nomeBase = perfil ? perfil.split(' ')[0] : 'Utilizador'; 
-    const emailCompleto = localStorage.getItem('emailUtilizador') || 'nao.definido@ipca.pt';
+    // Obter o nome base do email (para a saudação dinâmica)
+    const nomeBase = emailCompleto.split('@')[0];
 
-    // 3. OBTER "PONTOS DE INJEÇÃO" DO HTML
+    // --- 3. OBTER "PONTOS DE INJEÇÃO" DO HTML ---
     const menuContainer = document.getElementById('menu-principal-dinamico');
     const conteudoContainer = document.getElementById('conteudo-principal-dinamico');
     const nomeUtilizadorEl = document.getElementById('display-nome-utilizador');
@@ -61,11 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const subtituloHeaderEl = document.getElementById('display-header-subtitulo');
     const logoLink = document.getElementById('logo-link');
 
-    // **VERIFICAÇÃO CRÍTICA (Adaptada):** Se o perfil for inválido, paramos.
+
+    // **VERIFICAÇÃO CRÍTICA:** Se o perfil for inválido, paramos.
     if (!perfil || (perfil !== 'organizador' && perfil !== 'participante')) {
         tituloHeaderEl.textContent = 'ERRO DE PERFIL';
         subtituloHeaderEl.textContent = 'O tipo de perfil (' + perfil + ') é inválido ou nulo. Verifique o login.';
-        // Não redireciona automaticamente para que possa inspecionar o erro.
         console.error('ERRO CRÍTICO: Perfil do Utilizador não é "organizador" nem "participante".');
         return; 
     }
@@ -81,10 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let conteudoHTML = '';
 
     if (perfil === 'organizador') {
-        // -------------------------
-        // CONSTRUIR DASHBOARD ORGANIZADOR
-        // -------------------------
-        tituloHeaderEl.textContent = `Bem-vindo João!`;
+        // CORREÇÃO: Usar nomeBase dinâmico
+        tituloHeaderEl.textContent = `Bem-vindo ${nomeBase}!`;
         subtituloHeaderEl.textContent = 'Crie os melhores eventos, workshops e conferências do IPCA!';
         
         menuHTML = `
@@ -127,10 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
     } else if (perfil === 'participante') {
-        // -------------------------
-        // CONSTRUIR DASHBOARD PARTICIPANTE
-        // -------------------------
-        tituloHeaderEl.textContent = `Bem-vindo João!`;
+        // CORREÇÃO: Usar nomeBase dinâmico
+        tituloHeaderEl.textContent = `Bem-vindo ${nomeBase}!`;
         subtituloHeaderEl.textContent = 'Participe nos melhores eventos, workshops e conferências do IPCA!';
         
         menuHTML = `
@@ -179,33 +161,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 7. INJETAR INFO DO PERFIL (RODAPÉ DA SIDEBAR) ---
     if (nomeUtilizadorEl && perfil) {
         nomeUtilizadorEl.textContent = nomeBase;
-        // Capitalizar a primeira letra do perfil
         perfilUtilizadorEl.textContent = perfil.charAt(0).toUpperCase() + perfil.slice(1);
     }
-
-
-    // --- 8. LÓGICA DE LOGOUT ---
-    const btnLogout = document.getElementById('btn-logout');
-    if (btnLogout) {
-        btnLogout.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            
-            // Limpar as chaves usadas pelo seu login.js
-            localStorage.removeItem('Utilizador Logado');
-            localStorage.removeItem('Perfil Utilizador');
-            localStorage.removeItem('emailUtilizador');
-            localStorage.removeItem('sidebarRecolhida'); 
-            
-            window.location.href = '../login.html';
-        });
-    }
-
-    // --- 9. LÓGICA DO TOGGLE DA BARRA LATERAL ---
+    
+    // --- 9. LÓGICA DO TOGGLE DA BARRA LATERAL (USA LOCALSTORAGE - MANTIDA) ---
     const toggleBtn = document.getElementById('toggle-sidebar');
     const container = document.getElementById('dashboard-container');
     
     if (toggleBtn && container) {
-        const isRecolhida = localStorage.getItem('sidebarRecolhida') === 'true';
+        // Manter a chave de preferência da sidebar no localStorage
+        const isRecolhida = localStorage.getItem('sidebarRecolhida') === 'true'; 
         if (isRecolhida) {
             container.classList.add('sidebar-recolhida');
             toggleBtn.textContent = '→';
@@ -216,9 +181,76 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleBtn.addEventListener('click', () => {
             container.classList.toggle('sidebar-recolhida');
             const novoEstado = container.classList.contains('sidebar-recolhida');
-            localStorage.setItem('sidebarRecolhida', novoEstado);
+            // Manter a chave de preferência da sidebar no localStorage
+            localStorage.setItem('sidebarRecolhida', novoEstado); 
             toggleBtn.textContent = novoEstado ? '→' : '←';
         });
     }
+}
 
+
+// =========================================================
+// SCRIPT PRINCIPAL DO DASHBOARD (MIGRADO PARA FIREBASE)
+// =========================================================
+document.addEventListener('DOMContentLoaded', () => {
+
+    // NOVO: Listener de estado de autenticação do Firebase
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            // Utilizador logado
+            
+            // 2. BUSCAR O PERFIL NO FIRESTORE (Substitui o localStorage para obter 'Perfil Utilizador')
+            try {
+                const uid = user.uid;
+                const doc = await db.collection("utilizadores").doc(uid).get();
+                
+                if (doc.exists) {
+                    const perfil = doc.data().perfil;
+                    const emailCompleto = user.email; // Substitui o localStorage para obter 'emailUtilizador'
+
+                    // Carregar o dashboard com base no perfil encontrado
+                    carregarConteudoDashboard(perfil, emailCompleto);
+
+                } else {
+                    // Perfil não encontrado no Firestore (inconsistência de dados)
+                    console.error("Documento de perfil não encontrado. A forçar logout.");
+                    auth.signOut();
+                }
+
+            } catch (error) {
+                console.error("Erro ao buscar perfil do Firestore:", error);
+                auth.signOut();
+            }
+
+        } else {
+            // --- 1. VERIFICAÇÃO DE SEGURANÇA (AUTENTICAÇÃO) --- (Substitui o localStorage check 'Utilizador Logado')
+            alert('Acesso negado. Por favor, faça login.');
+            window.location.href = '../login.html'; 
+        }
+    });
+
+    // --- 8. LÓGICA DE LOGOUT (AGORA FIREBASE) ---
+    const btnLogout = document.getElementById('btn-logout'); 
+    
+    if (btnLogout) {
+        btnLogout.addEventListener('click', async (e) => {
+            e.preventDefault(); 
+            
+            try {
+                // 1. Fazer logout do Firebase
+                await auth.signOut();
+                
+                // 2. Limpar apenas a chave de preferência da sidebar (única chave de localStorage mantida)
+                localStorage.removeItem('sidebarRecolhida');
+                
+                // 3. Redirecionar
+                window.location.href = '../login.html';
+            } catch (error) {
+                console.error("Erro ao fazer logout Firebase:", error);
+            }
+        });
+    }
+    
+    // NOTA: A lógica do toggle da sidebar (Passo 9) foi movida para a função carregarConteudoDashboard
+    // para garantir que os elementos do DOM estão prontos, mas ainda usa localStorage.
 });
